@@ -11,6 +11,53 @@ at the same time and via the same URLs to serve both the application's
 JSON API endpoints and appliations assets needed for the browser to run
 the application.
 
+## Usage
+
+For the middleware to run, it needs to be initialized with the proper
+parameters and prerequisites. It expects two things: (1) to receive
+an `options` object containing the Express application on `init()`
+call; and (2) Express application instance has to have a
+`renderAppShell(res, appConfig, appData)` method defined on it.
+
+`renderAppShell(res, appConfig, appData)` is a function that knows
+how to render the client-side single page application shell HTML file,
+and needs to be defined on the Express application instance by the
+developer. This middleware doesn't imply the implementation aside
+of the function's signature and the requirement of its existence.
+
+
+Example of `renderAppShell(res, appConfig, appData)` function (can be defined in `app.js`):
+
+    function _renderAppShell(res, appConfig, appData) {
+      appConfig = appConfig || {};
+      appData = appData || {};
+
+      res.render('index', {
+          layout    : false
+        , appTitle  : appConfig.appTitle
+        , appConfig : JSON.stringify(appConfig)
+        , appData   : JSON.stringify(appData)
+      });
+    }
+
+    app.renderAppShell = _renderAppShell
+
+
+Example of the middleware initialization and usage:
+
+    var express   = require('express')
+      , ReqFilter = require('connect-spa-request-filter')
+      , app       = express()
+      , reqFilter;
+
+    app.renderAppShell = _renderAppShell;
+    reqFilter = ReqFilter.init({ app: app });
+
+    app.configure(function() {
+      // NOTE: use reqFilter **after** static middleware so it doesn't intercept static content serving
+      app.use(reqFilter());
+    });
+
 
 ## History
 

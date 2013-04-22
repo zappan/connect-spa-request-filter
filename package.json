@@ -1,0 +1,19 @@
+{
+  "name"          : "connect-spa-request-filter",
+  "description"   : "Single Page Apps APIs request filter middleware for connect",
+  "version"       : "0.1.0",
+  "main"          : "./lib/requestFilter.js",
+  "repository"    : {
+    "type": "git",
+    "url" : "git@github.com:zappan/connect-spa-request-filter.git"
+  },
+  "keywords"      : [
+    "connect",
+    "express",
+    "middleware",
+    "spa",
+    "json"
+  ],
+  "author"        : "Tomislav Capan <tomislav.capan@gmail.com>",
+  "license"       : "MIT"
+}
