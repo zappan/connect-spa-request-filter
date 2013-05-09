@@ -25,6 +25,9 @@ and needs to be defined on the Express application instance by the
 developer. This middleware doesn't imply the implementation aside
 of the function's signature and the requirement of its existence.
 
+Optionally, an array of routes to void filtering on may be passed in
+options hash as `voidFilterRoutes` attribute (see example below).
+
 
 Example of `renderAppShell(res, appConfig, appData)` function (can be defined in `app.js`):
 
@@ -51,7 +54,10 @@ Example of the middleware initialization and usage:
       , reqFilter;
 
     app.renderAppShell = _renderAppShell;
-    reqFilter = ReqFilter.init({ app: app });
+    reqFilter = ReqFilter.init({
+        app: app
+      , voidFilterRoutes: ['/logout']
+    });
 
     app.configure(function() {
       // NOTE: use reqFilter **after** static middleware so it doesn't intercept static content serving
@@ -61,6 +67,7 @@ Example of the middleware initialization and usage:
 
 ## History
 
+  * **0.2.0** - [2013-05-09] Adding an option to void filtering on a defined set of routes
   * **0.1.0** - [2013-04-22] Initial release
 
 ## License
