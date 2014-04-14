@@ -14,36 +14,28 @@ the application.
 ## Usage
 
 For the middleware to run, it needs to be initialized with the proper
-parameters and prerequisites. It expects two things: (1) to receive
-an `options` object containing the Express application on `init()`
-call; and (2) Express application instance has to have a
-`renderAppShell(res, appConfig, appData)` method defined on it.
+parameters and prerequisites. It expects to receive an `options` object
+containing the following items
 
-`renderAppShell(res, appConfig, appData)` is a function that knows
-how to render the client-side single page application shell HTML file,
-and needs to be defined on the Express application instance by the
-developer. This middleware doesn't imply the implementation aside
-of the function's signature and the requirement of its existence.
-
-Optionally, an array of routes to void filtering on may be passed in
-options hash as `voidFilterRoutes` attribute (see example below).
-
-
-Example of `renderAppShell(res, appConfig, appData)` function (can be defined in `app.js`):
-
-    function _renderAppShell(res, appConfig, appData) {
-      appConfig = appConfig || {};
-      appData = appData || {};
-
-      res.render('index', {
-          layout    : false
-        , appTitle  : appConfig.appTitle
-        , appConfig : JSON.stringify(appConfig)
-        , appData   : JSON.stringify(appData)
-      });
-    }
-
-    app.renderAppShell = _renderAppShell
+* `appShell` - _optional_ hash object containing options to render
+the application shell HTML. _Supported_ fields are:
+  * `view` - indicates the name of the view (template) to render
+  (default: `'index'`)
+  * `layout` - indicates whether view should be rendered in a master
+  layout (default: `false`)
+* `appConfig` - _required_ hash object with application configuration.
+_Required_ fields:
+  * `appTitle` - used to render the application shell HTML `<title>` tag
+  * the whole object will be passed to the client-side through the app shell
+  `<script>` tag
+  * it can contain any additional config needed by the client-side app
+* `appData` - _optional_ hash object with application bootstrap data
+  * default: `{}`
+  * the whole object will be passed to the client-side through the app shell
+  `<script>` tag
+  * it should contain any initial set of data for the client-side app
+* `voidFilterRoutes` - _optional_ array of routes to void filtering on
+  * default: `[]`
 
 
 Example of the middleware initialization and usage:
@@ -53,20 +45,20 @@ Example of the middleware initialization and usage:
       , app       = express()
       , reqFilter;
 
-    app.renderAppShell = _renderAppShell;
-    reqFilter = ReqFilter.init({
-        app: app
-      , voidFilterRoutes: ['/logout']
+    reqFilter = ReqFilter.configure({
+      appConfig       : { appTitle: 'My Super Single Page App' },
+      appData         : {},
+      appShell        : { view: 'index', layout: false },
+      voidFilterRoutes: ['/logout']
     });
 
-    app.configure(function() {
-      // NOTE: use reqFilter **after** static middleware so it doesn't intercept static content serving
-      app.use(reqFilter());
-    });
+    // NOTE: use reqFilter **after** static middleware so it doesn't intercept static content serving
+    app.use(reqFilter());
 
 
 ## History
 
+  * **0.3.0** - [2014-04-14] Included rendering of the app shell within the middleware, with configurable options
   * **0.2.2** - [2014-04-14] Relaxing lodash version dependency
   * **0.2.1** - [2013-xx-xx] _Unpublished. Because reasons._
   * **0.2.0** - [2013-05-09] Adding an option to void filtering on a defined set of routes
