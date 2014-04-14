@@ -1,7 +1,7 @@
 {
   "name"          : "connect-spa-request-filter",
   "description"   : "Single Page Apps APIs request filter middleware for connect",
-  "version"       : "0.2.1",
+  "version"       : "0.2.2",
   "main"          : "./lib/requestFilter.js",
   "repository"    : {
     "type": "git",

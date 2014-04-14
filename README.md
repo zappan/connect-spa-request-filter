@@ -67,7 +67,8 @@ Example of the middleware initialization and usage:
 
 ## History
 
-  * **0.2.1** - [2014-04-14] Relaxing lodash version dependency
+  * **0.2.2** - [2014-04-14] Relaxing lodash version dependency
+  * **0.2.1** - [2013-xx-xx] _Unpublished. Because reasons._
   * **0.2.0** - [2013-05-09] Adding an option to void filtering on a defined set of routes
   * **0.1.0** - [2013-04-22] Initial release
 
